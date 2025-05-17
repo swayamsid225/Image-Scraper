@@ -46,3 +46,37 @@ This app allows users to input one or more webpage URLs, scrape all images from 
 ```bash
 cd backend
 npm install
+
+```
+<h3>Output Images</h3>
+
+<table>
+  <tr>
+    <td align="center">
+      <strong>Output Image</strong><br>
+      <img src="images/Screenshot 2025-05-17 172606.png" width="200">
+    </td>
+    <td align="center">
+      <strong>Download in Zip</strong><br>
+      <img src="images/Screenshot 2025-05-17 172621.png" width="200">
+    </td>
+    <td align="center">
+      <strong>Multiple Links</strong><br>
+      <img src="images/Screenshot 2025-05-17 172910.png" width="200">
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <strong>Link History</strong><br>
+      <img src="images/Screenshot 2025-05-17 173000.png" width="200">
+    </td>
+    <td align="center">
+      <strong>Mobile View</strong><br>
+      <img src="images/Screenshot 2025-05-17 173026.png" width="200">
+    </td>
+    <td align="center">
+      <strong>Responsive</strong><br>
+      <img src="images/Screenshot 2025-05-17 173039.png" width="200">
+    </td>
+  </tr>
+</table>
