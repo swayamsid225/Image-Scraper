@@ -15,7 +15,7 @@ export default function ImageScraper() {
 
   const fetchHistory = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/history');
+      const res = await axios.get('https://hackthehaze-fullstack-image-scraper.onrender.com/api/history');
       setHistory(res.data);
     } catch (err) {
       console.error('Failed to fetch history');
@@ -37,7 +37,7 @@ export default function ImageScraper() {
 
       const uniqueUrls = Array.from(new Set(inputUrls));
 
-      const res = await axios.post('http://localhost:5000/api/scrape', {
+      const res = await axios.post('https://hackthehaze-fullstack-image-scraper.onrender.com/api/scrape', {
         urls: uniqueUrls
       });
       setImages(res.data);
@@ -57,7 +57,7 @@ export default function ImageScraper() {
 
   const handleDownloadSelected = async () => {
     try {
-      const res = await axios.post('http://localhost:5000/api/download', { images: selected }, { responseType: 'blob' });
+      const res = await axios.post('https://hackthehaze-fullstack-image-scraper.onrender.com/api/download', { images: selected }, { responseType: 'blob' });
       const blob = new Blob([res.data], { type: 'application/zip' });
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
@@ -72,7 +72,7 @@ export default function ImageScraper() {
     setUrls(url);
     try {
       setLoading(true);
-      const res = await axios.post('http://localhost:5000/api/scrape', {
+      const res = await axios.post('https://hackthehaze-fullstack-image-scraper.onrender.com/api/scrape', {
         urls: [url]
       });
       setImages(res.data);
@@ -93,7 +93,7 @@ export default function ImageScraper() {
     if (history.length === 0) return;
     const topHistoryItem = history[0];
     try {
-      await axios.delete(`http://localhost:5000/api/history`, { data: { url: topHistoryItem.url } });
+      await axios.delete(`https://hackthehaze-fullstack-image-scraper.onrender.com/api/history`, { data: { url: topHistoryItem.url } });
       fetchHistory();
     } catch (err) {
       console.error('Failed to remove top history item');
