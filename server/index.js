@@ -94,7 +94,7 @@ app.get('/api/history', async (req, res) => {
   }
 });
 
-// ✅ API: Delete a history item
+// API: Delete a history item
 app.delete('/api/history', async (req, res) => {
   const { url } = req.body;
   if (!url) {
