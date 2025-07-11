@@ -16,10 +16,8 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/imageScraper', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(MONGO_URI);
+
 
 // Mongoose Schema
 const scrapeSchema = new mongoose.Schema({
