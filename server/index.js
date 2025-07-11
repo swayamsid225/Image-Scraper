@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect(MONGO_URI);
+mongoose.connect(MONGODB_URI);
 
 
 // Mongoose Schema
