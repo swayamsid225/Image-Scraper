@@ -216,27 +216,39 @@ app.get('/api/proxy', (req, res) => {
   const imageUrl = req.query.url;
   if (!imageUrl) return res.status(400).send('Missing image URL');
 
-  const client = imageUrl.startsWith('https') ? https : http;
-
-  client.get(imageUrl, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-      'Accept': 'image/*,*/*',
-      'Referer': 'https://www.google.com'
-    }
-  }, (response) => {
-    if (response.statusCode !== 200) {
-      res.status(response.statusCode).send(`Failed to fetch image: ${response.statusCode}`);
-      return;
+  try {
+    const parsedUrl = new URL(imageUrl);
+    if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+      return res.status(400).send(`Unsupported protocol: ${parsedUrl.protocol}`);
     }
 
-    res.setHeader('Content-Type', response.headers['content-type'] || 'image/jpeg');
-    response.pipe(res);
-  }).on('error', (err) => {
-    console.error('Proxy error:', err.message);
-    res.status(500).send('Failed to proxy image');
-  });
+    const client = parsedUrl.protocol === 'https:' ? https : http;
+
+    client.get(imageUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        'Accept': 'image/*,*/*',
+        'Referer': 'https://www.google.com'
+      }
+    }, (response) => {
+      if (response.statusCode !== 200) {
+        res.status(response.statusCode).send(`Failed to fetch image: ${response.statusCode}`);
+        return;
+      }
+
+      res.setHeader('Content-Type', response.headers['content-type'] || 'image/jpeg');
+      response.pipe(res);
+    }).on('error', (err) => {
+      console.error('Proxy error:', err.message);
+      res.status(500).send('Failed to proxy image');
+    });
+
+  } catch (err) {
+    console.error('Invalid URL:', err.message);
+    return res.status(400).send('Invalid URL');
+  }
 });
+
 
 // Root
 app.get('/', (req, res) => {
@@ -246,3 +258,4 @@ app.get('/', (req, res) => {
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+
