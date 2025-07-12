@@ -64,9 +64,13 @@ app.post('/api/scrape', async (req, res) => {
         if (src) {
           try {
             const base = new URL(url);
-            if (!src.startsWith('http')) {
-              src = base.origin + (src.startsWith('/') ? src : '/' + src);
+
+            if (src.startsWith('//')) {
+              src = 'https:' + src;
+            } else if (!src.startsWith('http')) {
+              src = new URL(src, base).href;
             }
+
             imgLinks.push(src);
           } catch (_) { }
         }
@@ -107,7 +111,6 @@ app.get('/api/history', async (req, res) => {
   }
 });
 
-
 //Delete history
 app.delete('/api/history', async (req, res) => {
   const { url } = req.body;
@@ -134,7 +137,6 @@ app.post('/api/download', async (req, res) => {
   const archive = archiver('zip', { zlib: { level: 9 } });
 
   output.on('close', () => {
-    // Only trigger download after archive is finalized and closed
     res.download(zipPath, 'images.zip', (err) => {
       if (err) {
         console.error('Download failed:', err.message);
@@ -192,12 +194,12 @@ app.post('/api/download', async (req, res) => {
               resolve();
             } catch (err) {
               console.warn(`Failed to process image ${imgUrl}: ${err.message}`);
-              resolve(); // skip the image but allow the ZIP to continue
+              resolve();
             }
           });
         }).on('error', (err) => {
           console.warn(`Failed to download image ${imgUrl}: ${err.message}`);
-          resolve(); // skip image on error
+          resolve();
         });
       });
     } catch (err) {
@@ -208,7 +210,6 @@ app.post('/api/download', async (req, res) => {
 
   archive.finalize();
 });
-
 
 //IMAGE PROXY to bypass 403
 app.get('/api/proxy', (req, res) => {
@@ -242,6 +243,6 @@ app.get('/', (req, res) => {
   res.send('Image Scraper API is running.');
 });
 
-//Start Server
+// Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
