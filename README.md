@@ -1,4 +1,3 @@
-# hackthehaze-fullstack-image-scraper
 
 link - https://image-scraperr.netlify.app/
 
